@@ -8,7 +8,8 @@
     <div class="container">
         <h1>Admin Panel</h1>
         <a href="{{ url_for('index') }}">Back to Quiz</a>
-        <a href="{{ url_for('logout') }}">Logout</a>
+		<!--       <a href="{{ url_for('logout') }}">Logout</a>         -->
+        
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
