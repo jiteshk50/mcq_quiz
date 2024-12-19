@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Question</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Question</h1>
+        <a href="{{ url_for('admin') }}">Back to Admin</a>
+        <div class="admin-container">
+            <form action="{{ url_for('edit_question', id=question.id) }}" method="POST">
+                <label for="question">Question:</label><br>
+                <textarea id="question" name="question" required>{{ question.question }}</textarea><br><br>
+
+                <label for="answer1">Answer 1:</label><br>
+                <input type="text" id="answer1" name="answer1" value="{{ question.answer1 }}" required><br><br>
+
+                <label for="answer2">Answer 2:</label><br>
+                <input type="text" id="answer2" name="answer2" value="{{ question.answer2 }}" required><br><br>
+
+                <label for="answer3">Answer 3:</label><br>
+                <input type="text" id="answer3" name="answer3" value="{{ question.answer3 or '' }}"><br><br>
+
+                <label for="answer4">Answer 4:</label><br>
+                <input type="text" id="answer4" name="answer4" value="{{ question.answer4 or '' }}"><br><br>
+
+                <label for="correct_answer">Correct Answer Index (0-3):</label><br>
+                <input type="number" id="correct_answer" name="correct_answer" min="0" max="3" value="{{ question.correct_answer }}" required><br><br>
+
+                <label for="explanation">Explanation:</label><br>
+                <textarea id="explanation" name="explanation">{{ question.explanation or '' }}</textarea><br><br>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

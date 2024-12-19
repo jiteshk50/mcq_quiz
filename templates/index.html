@@ -1,0 +1,19 @@
+<head>
+    <title>MCQ Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>MCQ Quiz</h1>
+        <div id="quiz-area">
+            <p id="question"></p>
+            <div id="answer-container"></div>
+            <p id="explanation"></p>
+            <p id="score">Score: 0</p>
+            <button id="next-question" style="display: none;">Next Question</button>
+            <button id="submit-quiz" style="display: none;">Submit Quiz</button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
