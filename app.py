@@ -171,4 +171,4 @@ def delete_question(id):
     return redirect(url_for('admin'))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
