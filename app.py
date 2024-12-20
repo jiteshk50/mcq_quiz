@@ -9,10 +9,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-# Database Configuration
+# Database Configuration (Use environment variable or default)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI', 'sqlite:///quiz.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your_secret_key'  # IMPORTANT: Change this!
+app.config['SECRET_KEY'] = 'your_secret_key' # IMPORTANT: Change this in production!
 
 db = SQLAlchemy(app)
 
@@ -41,7 +41,7 @@ class Question(db.Model):
     correct_answer = db.Column(db.Integer, nullable=False)
     explanation = db.Column(db.String(255))
 
-# Create the database tables
+# Create Database Tables (Only run this once to create the database)
 with app.app_context():
     db.create_all()
 
@@ -83,12 +83,17 @@ def register():
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
+    
+@app.route("/result")
+def result():
+    score = request.args.get("score", 0, type=int)
+    return render_template("result.html", score=score)
+
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.')
     return redirect(url_for('login'))
 
 @app.route("/admin")
@@ -171,4 +176,4 @@ def delete_question(id):
     return redirect(url_for('admin'))
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
