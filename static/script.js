@@ -5,7 +5,7 @@ let answered = false;
 const questionElement = document.getElementById("question");
 const answerContainer = document.getElementById("answer-container");
 const explanationElement = document.getElementById("explanation");
-const scoreElement = document.getElementById("score"); // Get the score element
+const scoreElement = document.getElementById("score");
 const nextQuestionButton = document.getElementById("next-question");
 
 function displayQuestion() {
@@ -14,10 +14,11 @@ function displayQuestion() {
         .then(response => response.json())
         .then(question => {
             if (question.error) {
-                alert("Quiz Finished! Your final score is " + score);
-                currentQuestionIndex = 0; // reset the index
-                score = 0; // reset the score
-                scoreElement.textContent = "Score: " + score; // update score
+                nextQuestionButton.textContent = "Submit";
+                nextQuestionButton.style.display = "block";
+                nextQuestionButton.addEventListener("click", () => {
+                    window.location.href = `/result?score=${score}`;
+                });
                 return;
             }
             questionElement.textContent = question.question;
@@ -59,10 +60,10 @@ function checkAnswer(selectedAnswer) {
             });
 
             if (data.isCorrect) {
-                score++; // Increment the score
+                score++;
             }
             explanationElement.textContent = (data.isCorrect ? "Correct! " : "Incorrect! The correct answer was " + buttons[data.correctAnswer].textContent + ". ") + data.explanation;
-            scoreElement.textContent = "Score: " + score; // Update the score display!
+            scoreElement.textContent = "Score: " + score;
             nextQuestionButton.style.display = "block";
         });
 }
