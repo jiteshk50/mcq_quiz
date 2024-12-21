@@ -9,10 +9,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-# Database Configuration (Use environment variable or default)
+# Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI', 'sqlite:///quiz.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your_secret_key' # IMPORTANT: Change this in production!
+app.config['SECRET_KEY'] = 'your_secret_key'
 
 db = SQLAlchemy(app)
 
@@ -41,7 +41,7 @@ class Question(db.Model):
     correct_answer = db.Column(db.Integer, nullable=False)
     explanation = db.Column(db.String(255))
 
-# Create Database Tables (Only run this once to create the database)
+# Create the database tables
 with app.app_context():
     db.create_all()
 
@@ -83,17 +83,12 @@ def register():
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
-    
-@app.route("/result")
-def result():
-    score = request.args.get("score", 0, type=int)
-    return render_template("result.html", score=score)
-
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
+    flash('You have been logged out.')
     return redirect(url_for('login'))
 
 @app.route("/admin")
@@ -105,7 +100,8 @@ def admin():
 @app.route("/")
 def index():
     questions = Question.query.all()
-    return render_template("index.html", questions=questions)
+    total_questions = len(questions)
+    return render_template("index.html", questions=questions, total_questions=total_questions)
 
 @app.route("/get_question/<int:index>")
 def get_question(index):
@@ -174,6 +170,33 @@ def delete_question(id):
     db.session.delete(question)
     db.session.commit()
     return redirect(url_for('admin'))
+
+@app.route("/result")
+def result():
+    score = request.args.get("score", 0, type=int)
+    total_questions = Question.query.count()  # Get total questions directly from the database
+    correct_answers = score
+    incorrect_answers = total_questions - correct_answers
+    percentage = (correct_answers / total_questions) * 100 if total_questions > 0 else 0
+
+    feedback = ""
+    if percentage >= 90:
+        feedback = "Excellent work!"
+    elif percentage >= 75:
+        feedback = "Great job!"
+    elif percentage >= 50:
+        feedback = "Good effort! Keep practicing."
+    else:
+        feedback = "Don't give up! Try again."
+
+    return render_template(
+        "result.html",
+        total_questions=total_questions,
+        correct_answers=correct_answers,
+        incorrect_answers=incorrect_answers,
+        percentage=round(percentage, 2),
+        feedback=feedback
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

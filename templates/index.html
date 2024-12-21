@@ -1,6 +1,9 @@
+<!DOCTYPE html>
+<html>
 <head>
     <title>MCQ Quiz</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="container">
@@ -11,7 +14,6 @@
             <p id="explanation"></p>
             <p id="score">Score: 0</p>
             <button id="next-question" style="display: none;">Next Question</button>
-            <button id="submit-quiz" style="display: none;">Submit Quiz</button>
         </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>

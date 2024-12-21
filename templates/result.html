@@ -3,6 +3,7 @@
 <head>
     <title>Quiz Result</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             background: linear-gradient(to bottom, #4facfe, #00f2fe);
@@ -41,6 +42,17 @@
             color: #00ffab;
         }
 
+        .summary {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .feedback {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
         .button {
             display: inline-block;
             padding: 15px 30px;
@@ -62,7 +74,23 @@
     <div class="container">
         <h1>Congratulations!</h1>
         <p>You have successfully completed the quiz.</p>
-        <h2>Your Score: {{ score }}</h2>
+        <div class="summary">
+            <p>Total Questions: {{ total_questions }}</p>
+            <p>Correct Answers: {{ correct_answers }}</p>
+            <p>Incorrect Answers: {{ incorrect_answers }}</p>
+            <p>Score: {{ percentage }}%</p>
+        </div>
+        <div class="feedback">
+            {% if percentage >= 90 %}
+                Excellent work! You're a quiz master!
+            {% elif percentage >= 75 %}
+                Great job! You have a solid understanding.
+            {% elif percentage >= 50 %}
+                Good effort! Keep practicing to improve.
+            {% else %}
+                Don't give up! Review the material and try again.
+            {% endif %}
+        </div>
         <a href="{{ url_for('index') }}" class="button">Restart Quiz</a>
     </div>
 </body>
